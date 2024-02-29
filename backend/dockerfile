@@ -18,4 +18,4 @@ EXPOSE 3001
 
 # Configura os comandos para iniciar a aplicação
 ENTRYPOINT ["npm", "run"]
-CMD [ "start" ]
+CMD [ "dev" ]
