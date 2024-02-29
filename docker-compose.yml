@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  frontend:
+    container_name: app_frontend
+    build: ./frontend
+    ports:
+      - 3000:3000
+    working_dir: /app-frontend
+    # Os `healthcheck` devem garantir que a aplicação
+    # está operacional, antes de liberar o container
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3000"]  # Caso utilize outra porta interna para o front, altere ela aqui também
+      timeout: 10s
+      retries: 5
+  backend:
+    container_name: app_backend
+    build: ./backend
+    ports:
+      - 3001:3001
+    working_dir: /app-backend
+    # Caso queira que o container esteja atualizado durante o desenvolvimento, sem que você precise ficar fazendo down e up dos containers, descomente as 3 linhas abaixo
+    command: dev 
+    volumes: 
+      - ./backend/src:/app-backend/src
+    depends_on:
+      postgres-database:
+        condition: service_healthy
+    environment:
+      - APP_PORT=3001
+      - JWT_SECRET=jwt_secret
+      # Os dados abaixo se referem ao container `db`
+      # Dica: Relembre aqui da comunicação interna entre containers
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=mysecret
+      - POSTGRES_HOST=postgres-database
+      - POSTGRES_PORT=5432
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3001"] # Caso utilize outra porta interna para o back, altere ela aqui também
+      timeout: 10s
+      retries: 5
+  postgres-database:
+    image: postgres
+    container_name: postgres-database
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: mysecret
+      POSTGRES_USER: postgres
+      POSTGRES_DB: lexartlabs
+    restart: 'always'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"] # Deve aguardar o banco ficar operacional
+      interval: 10s
+      timeout: 5s
+      retries: 5 
+    cap_add:
+      - SYS_NICE # Deve omitir alertas menores
