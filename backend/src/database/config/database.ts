@@ -1,15 +1,12 @@
 import { Options } from 'sequelize';
 
 const config: Options = {
-  username: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || '123456',
-  database: 'TRYBE_FUTEBOL_CLUBE',
-  host: process.env.DB_HOST || 'localhost',
-  port: Number(process.env.DB_PORT) || 3306,
-  dialect: 'mysql',
-  dialectOptions: {
-    timezone: 'Z',
-  },
+  username: process.env.POSTGRES_USER || 'postgres',
+  password: process.env.POSTGRES_PASS || 'mysecret',
+  database: process.env.POSTGRES_DB || 'lexartlabs',
+  host: process.env.POSTGRES_HOST || 'postgres-database',
+  port: Number(process.env.POSTGRES_PORT) || 5432,
+  dialect: 'postgres',
   logging: false,
 }
 

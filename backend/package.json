@@ -10,7 +10,8 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -19,6 +20,7 @@
     "express-async-errors": "^3.1.1",
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
     "sequelize": "^6.37.1"
   },
   "name": "backend",
@@ -27,8 +29,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./build/server.js",
-    "dev": "tsx src/server.ts",
-    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsnd --watch \"./src/**\" --transpile-only ./src/server.ts",
+    "db:reset": "npx tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
