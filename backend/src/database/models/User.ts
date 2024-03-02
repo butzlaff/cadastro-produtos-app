@@ -16,7 +16,7 @@ InferCreationAttributes<User>> {
   declare email: string;
 
   declare password: string;
-}
+};
 
 User.init({
   id: {
@@ -26,11 +26,11 @@ User.init({
     autoIncrement: true,
   },
   username: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   email: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   password: {
