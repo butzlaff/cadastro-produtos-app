@@ -1,10 +1,11 @@
-import { JwtPayload, 
-    Secret,
-    SignOptions, 
-    verify, 
-    sign, 
-    decode 
-  } from 'jsonwebtoken';
+import {
+  JwtPayload,
+  Secret,
+  SignOptions,
+  decode,
+  sign,
+  verify
+} from 'jsonwebtoken';
 
 export type TokenJWT = {
   email: string;

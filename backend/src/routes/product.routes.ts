@@ -1,6 +1,6 @@
-import { Request, Router, Response, NextFunction } from 'express';
 import ProductController from '@/controllers/Product.controller';
 import Validations from '@/middlewares/Validate';
+import { Request, Response, Router } from 'express';
 
 const router = Router();
 

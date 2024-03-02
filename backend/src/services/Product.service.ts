@@ -1,15 +1,15 @@
-import { IProductModel } from '@interfaces/IProductModel';
+import { IProduct, TProducts } from '@/interfaces/IProducts';
 import { ServiceResponse } from '@/interfaces/Response';
 import ProductModel from '@/model/Product.model';
-import { IProduct, IProductData, IProductDetails } from '@/interfaces/IProducts';
 import ProductOrganizer from '@/utils/ProductOrganizer';
+import { IProductModel } from '@interfaces/IProductModel';
 
 export default class ProductService {
   constructor(
     private productModel: IProductModel = new ProductModel(),
   ) { }
 
-  public async create(data: IProduct | IProductData[] | IProductDetails):
+  public async create(data: TProducts):
   Promise<ServiceResponse<IProduct | IProduct[]>> {
     try {
       const productOrganizer = new ProductOrganizer();

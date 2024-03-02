@@ -1,16 +1,21 @@
-import { IProductData, IProductDetails, IProduct } from '@/interfaces/IProducts';
+import {
+  IProduct,
+  IProductData,
+  IProductDetails,
+  TProducts
+} from '@/interfaces/IProducts';
 
 export default class ProductOrganizer {
-  public organizeProduct(productData: IProduct | IProductDetails | IProductData[]): IProduct | IProduct[] {
+  public organizeProduct(productData: TProducts): IProduct | IProduct[] {
     if (Array.isArray(productData)) {
-        // Organiza Estrutura 3
-        return this.organizeProductType3(productData);
+      // Organiza Estrutura 3
+      return this.organizeProductType3(productData);
     } else if ('details' in productData) {
-        // Organiza Estrutura 2
-        return this.organizeProductType2(productData);
+      // Organiza Estrutura 2
+      return this.organizeProductType2(productData);
     } else {
-        // Retorna Estrutura 1
-        return productData;
+      // Retorna Estrutura 1
+      return productData;
     }
 }
 

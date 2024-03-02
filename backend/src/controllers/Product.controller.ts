@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
-import mapStatusHTTP from '@utils/mapStatusHTTP';
 import ProductService from '@/services/Product.service';
-import ProductModel from '@/model/Product.model';
+import mapStatusHTTP from '@utils/mapStatusHTTP';
+import { Request, Response } from 'express';
 
 export default class ProductController {
   constructor(

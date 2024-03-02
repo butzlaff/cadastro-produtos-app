@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import mapStatusHTTP from '@utils/mapStatusHTTP';
-import UserService from '@services/User.service';
 import { userSchema } from '@/interfaces/IUser';
+import UserService from '@services/User.service';
+import mapStatusHTTP from '@utils/mapStatusHTTP';
+import { Request, Response } from 'express';
 
 export default class UserController {
   constructor(

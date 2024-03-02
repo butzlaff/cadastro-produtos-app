@@ -1,4 +1,5 @@
 export interface IProduct {
+  id?: number;
   name: string;
   brand: string;
   model: string;
@@ -27,3 +28,5 @@ export interface IProductDetails  {
     color: string;
   };
 };
+
+export type TProducts = IProduct | IProductData[] | IProductDetails;
