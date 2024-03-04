@@ -11,4 +11,9 @@ export default class ProductController {
     const { status, data } = await this.productService.create(req.body);
     return res.status(mapStatusHTTP(status)).json(data);
   };
+
+  public getProducts = async (req: Request, res: Response): Promise<Response> => {
+    const { status, data } = await this.productService.getProducts();
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
 }

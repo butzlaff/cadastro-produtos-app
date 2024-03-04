@@ -12,4 +12,9 @@ router.post('/new',
     productController.create(req, res),
 );
 
+router.get('/',
+    (req: Request, res: Response) =>
+    productController.getProducts(req, res),
+);
+
 export default router;

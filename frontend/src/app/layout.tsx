@@ -1,3 +1,4 @@
+import QueryContext from '@/context/UseQuery';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -16,7 +17,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <QueryContext >
+      <body className={inter.className}>
+        <main className='h-full bg-slate-800 flex justify-center items-center min-h-screen'>
+          <div className='bg-white dark:bg-slate-900/70 rounded-lg px-10 py-10 ring-1 ring-slate-900/5 shadow-xl flex justify-center items-center min-w-[50%]'>
+            {children}
+          </div>
+        </main>
+      </body>
+      </QueryContext>
     </html>
   );
 }

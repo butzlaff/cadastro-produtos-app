@@ -26,5 +26,10 @@ export default class ProductService {
     } catch (error: unknown) {
       return { status: 'INVALID_DATA', data: { message: "Invalid data"} };
     }
-};
+  };
+
+  public async getProducts(): Promise<ServiceResponse<IProduct[]>> {
+    const products = await this.productModel.findAll();
+    return { status: 'SUCCESSFUL', data: products };
+  }
 };
