@@ -15,12 +15,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <QueryContext >
       <body className={inter.className}>
         <main className='h-full bg-slate-800 flex justify-center items-center min-h-screen'>
-          <div className='bg-white dark:bg-slate-900/70 rounded-lg px-10 py-10 ring-1 ring-slate-900/5 shadow-xl flex justify-center items-center min-w-[50%]'>
+          <div className='bg-white dark:bg-slate-900/70 rounded-lg px-10 py-10 ring-1 ring-slate-900/5 shadow-xl flex justify-center items-center'>
             {children}
           </div>
         </main>

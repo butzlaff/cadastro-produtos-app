@@ -17,4 +17,14 @@ router.get('/',
     productController.getProducts(req, res),
 );
 
+router.delete('/:id',
+    (req: Request, res: Response) =>
+    productController.deleteProduct(req, res),
+);
+
+router.put('/:id',
+    (req: Request, res: Response) =>
+    productController.updateProduct(req, res),
+);
+
 export default router;

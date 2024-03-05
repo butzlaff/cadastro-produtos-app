@@ -19,7 +19,7 @@ export default class UserController {
     if (!result.success) {
       return res.status(400).json({message: "All fields are required"});
     }
-    const { status, data } = await this.userService.create(result.data);
-    return res.status(mapStatusHTTP(status)).json(data);
+    const { status } = await this.userService.create(result.data);
+    return res.status(mapStatusHTTP(status)).json(null);
   };
 }

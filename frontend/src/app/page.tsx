@@ -2,9 +2,8 @@
 
 import { ProductService } from '@/Services/Product';
 import TableProduct from '@/components/TableProduct';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Swal from 'sweetalert2';
-
 
 export default function Home() {
   const queryClient = useQueryClient();
@@ -23,13 +22,27 @@ export default function Home() {
       })
     }
   });
-  const handleDelete = (id: number) => {
-    console.log(id)
-  }
+  const { mutate: handleDelete } = useMutation({
+    mutationFn: async (id: number) => {
+      const service = new ProductService();
+      await service.deleteProduct(id);
+    },
+    onSuccess: () => {
+      Swal.fire('Deletado com Suceso!');
+      queryClient.invalidateQueries(['get_products']);
+    },
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Algo deu errado!',
+      })}
+  });
+
 
   return (   
-    <>
+    <div className='flex flex-col'>
     { products && <TableProduct data={ products } handleDelete={ handleDelete } /> }
-    </>
+    </div>
   );
 }

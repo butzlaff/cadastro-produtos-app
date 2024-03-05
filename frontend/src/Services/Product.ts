@@ -15,13 +15,13 @@ export class ProductService {
     return data;
   }
 
-  public async deleteProduct(id: number) : Promise<IProduct> {
+  public async deleteProduct(id: number) : Promise<boolean> {
     const response = await fetch(`http://localhost:3001/product/${id}`, {
       method: 'DELETE',
     });
-    const data = await response.json();
-    return data;
-  }
+    if (response.status === 204) return true;
+    return false;
+  };
 
   public async createProduct(product: IProduct) : Promise<IProduct | IProduct[]> {
     const response = await fetch('http://localhost:3001/product/new', {

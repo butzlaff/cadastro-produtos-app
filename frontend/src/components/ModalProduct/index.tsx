@@ -1,5 +1,6 @@
 "use client";
 
+import { ProductService } from '@/Services/Product';
 import { Button, Col, Drawer, Form, Input, Row, Space } from 'antd';
 import { PenSquare } from 'lucide-react';
 import { useState } from 'react';
@@ -14,7 +15,7 @@ type Product = {
 const ModalProduct = ({ product }: Product) => {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
-  const [productEdited, setProductEdited] = useState({ ...product });
+  const [productEdited, setProductEdited] = useState<IProduct>({ ...product });
 
   const showDrawer = () => {
     setOpen(true);
@@ -26,13 +27,13 @@ const ModalProduct = ({ product }: Product) => {
 
   const { mutate: handleSubmit, isLoading } = useMutation({
     mutationFn: async () => {
-      // const service = new ProductService();
-      // const { id, ...userUpdated } = userEdited;
-      // await service.updateUser(product.id, userUpdated);
+      const service = new ProductService();
+      // const { id, ...productUpdated } = productEdited;
+      await service.updateProduct(productEdited);
     },
     onSuccess: () => {
       Swal.fire('Editado com Suceso!');
-      queryClient.invalidateQueries(['get_users']);
+      queryClient.invalidateQueries(['get_products']);
       onClose();
     },
     onError: () => {
@@ -99,7 +100,6 @@ const ModalProduct = ({ product }: Product) => {
               >
                 <Input
                   placeholder='Por favor, entre com o nome do produto'
-                  // defaultValue={product.name} 
                   value={productEdited.name}
                   onChange={(e) =>
                     setProductEdited({ ...productEdited, name: e.target.value })
@@ -118,7 +118,6 @@ const ModalProduct = ({ product }: Product) => {
                 <Input
                   style={{ width: '100%' }}
                   placeholder='Por favor, entre com a marca do produto'
-                  // defaultValue={product.brand} 
                   value={productEdited.brand}
                   onChange={(e) =>
                     setProductEdited({
@@ -146,7 +145,6 @@ const ModalProduct = ({ product }: Product) => {
                   type='number'
                   min={0}
                   placeholder='Por favor, entre com o preço do produto'
-                  // defaultValue={product.price} 
                   value={productEdited.price}
                   onChange={(e) =>
                     setProductEdited({
@@ -171,7 +169,6 @@ const ModalProduct = ({ product }: Product) => {
                 <Input
                   style={{ width: '100%' }}
                   placeholder='Por favor, entre com a cor do produto'
-                  // defaultValue={product.color} 
                   value={productEdited.color}
                   onChange={(e) =>
                     setProductEdited({

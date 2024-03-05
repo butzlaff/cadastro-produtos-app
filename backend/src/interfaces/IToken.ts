@@ -1,1 +1,3 @@
-export type IToken = string;  
+export type IToken = {
+  token: string;
+}

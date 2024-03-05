@@ -2,6 +2,10 @@ import SequelizeProduct from '@/database/models/Product';
 import { IProductModel } from '@interfaces/IProductModel';
 import { IProduct } from '@interfaces/IProducts';
 
+interface AffectedCount {
+  affectedCount: number;
+}
+
 export default class ProductModel implements IProductModel {
   private model = SequelizeProduct;
 
@@ -14,6 +18,33 @@ export default class ProductModel implements IProductModel {
   }
 
   async findAll(): Promise<IProduct[]> {
-    return await this.model.findAll();
+    return await this.model.findAll({
+      order: ["id"]
+    });
+  };
+
+  async findById(id: number): Promise<IProduct | null> {
+    return await this.model.findOne({
+      where: {
+        id
+      }
+    });
   }
+
+  async deleteProduct(id: number) : Promise<number> {
+    return await this.model.destroy({
+      where: {
+        id
+      }
+    });
+  };
+
+  async updateProduct(id: number, product: Omit<IProduct, 'id'>): Promise<[number]> {
+    console.log(product);
+    return await this.model.update(product, {
+      where: {
+        id,
+      }
+    })
+  };
 };
