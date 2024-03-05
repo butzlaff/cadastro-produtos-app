@@ -9,9 +9,13 @@ export default class UserController {
   ) { }
 
   public login = async (req: Request, res: Response): Promise<Response> => {
-    const { email, password } = req.body;
-    const { status, data } = await this.userService.login({ email, password });
-    return res.status(mapStatusHTTP(status)).json(data);
+    const { username, password } = req.body;
+    const data = await this.userService.login({ username, password });
+    if (data) {
+      res.cookie('token', data, { httpOnly: true });
+      return res.status(mapStatusHTTP(data.status)).json(data.data);
+    }
+    return res.status(400).json({message: "All fields are required"});
   };
 
   public create = async (req: Request, res: Response): Promise<Response> => {

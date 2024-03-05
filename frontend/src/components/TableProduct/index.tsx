@@ -1,7 +1,6 @@
 import { XCircle } from 'lucide-react';
 import { useState } from 'react';
 import ModalProduct from '../ModalProduct';
-
 type Props = {
   data: IProduct[];
   handleDelete: (id: number) => void;

@@ -10,18 +10,16 @@ export default class UserService {
   constructor(private userModel: IUserModel = new UserModel()) {}
 
   public async login({
-    email,
+    username,
     password,
-  }: IUserLogin): Promise<ServiceResponse<IToken>> {
-    const user = await this.userModel.findByEmail(email);
+  }: IUserLogin): Promise<ServiceResponse<IToken> | null> {
+    const user = await this.userModel.findByUsername(username);
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      return {
-        status: 'UNAUTHORIZED',
-        data: { message: 'Invalid email or password' },
-      };
+      return null;
     }
-    const token = JWT.sign({ email });
-    return { status: 'SUCCESSFUL', data: { token: token } };
+    const { email } = user;
+    const token = JWT.sign({ email, username });
+    return { status: 'SUCCESSFUL', data: token };
   }
 
   public async create(
