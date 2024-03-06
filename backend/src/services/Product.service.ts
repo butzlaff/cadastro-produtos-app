@@ -19,7 +19,7 @@ export default class ProductService {
       } else {
         product = await this.productModel.create(productOrganized);
       }
-      console.log(product);
+      console.log(productOrganized);
 
       return { status: 'CREATED', data: product };
     } catch (error: unknown) {
@@ -30,6 +30,12 @@ export default class ProductService {
   public async getProducts(): Promise<ServiceResponse<IProduct[]>> {
     const products = await this.productModel.findAll();
     return { status: 'SUCCESSFUL', data: products };
+  }
+
+  public async getProduct(id: number): Promise<ServiceResponse<IProduct>> {
+    const product = await this.productModel.findById(id);
+    if (product) return { status: 'SUCCESSFUL', data: product };
+    return { status: 'NOT_FOUND', data: { message: 'Product not found' } };
   }
 
   public async deleteProduct(id: string): Promise<ServiceResponse<IProduct>> {

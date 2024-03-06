@@ -1,46 +1,30 @@
 'use client';
 
-import { Register } from '@/Services/User';
+import { CreateProduct, ProductService } from '@/Services/Product';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 
-export interface FormState {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export default function RegisterForm() {
+export default function CreateProduct() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormState>();
+  } = useForm<CreateProduct>();
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormState> = async (data) => {
-    const validateConfirmPassword = data.password === data.confirmPassword;
-
-    if (!validateConfirmPassword) {
-      return Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'As senha e confirmação de senha devem ser iguais.',
-      });
-    }
-
+  const onSubmit: SubmitHandler<CreateProduct> = async (data) => {
     try {
-      await Register(data);
+      const service = new ProductService();
+      await service.createProduct(data);
       await Swal.fire('Cadastrado com sucesso');
     } catch (e) {
       return Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Usuário já cadastrado.',
-        footer: '<a href="/auth/signin">Faça seu login!</a>',
+        text: 'Aconteceu algum erro...',
+        timer: 2000,
       });
     }
     router.push('/');
@@ -49,60 +33,75 @@ export default function RegisterForm() {
   return (
     <main className='flex items-center justify-center p-4'>
       <div className='flex flex-col gap-4 w-full text-white'>
-        <h2 className='text-2xl text-center font-bold'>Sign Up</h2>
+        <h2 className='text-2xl text-center font-bold'>Cadastro de Celular</h2>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col'>
           <div className='relative pb-4 flex flex-col'>
-            <label htmlFor='fullName'>Usuário</label>
+            <label htmlFor='name'>Nome: </label>
             <input
               type='text'
-              id='fullName'
-              placeholder='Usuário'
+              id='name'
+              placeholder='Nome do produto'
               className='border border-gray-300 rounded-md px-4 py-2 w-64 text-black'
-              {...register('username', { required: true })}
+              {...register('name', { required: true })}
             />
-            {errors.username && (
+            {errors.name && (
               <span className='error-message'>Campo obrigatório</span>
             )}
           </div>
 
           <div className='relative pb-4 flex flex-col'>
-            <label htmlFor='email'>Email</label>
+            <label htmlFor='model'>Modelo</label>
             <input
-              type='email'
-              id='email'
-              placeholder='Email'
+              type='text'
+              id='model'
+              placeholder='Modelo do produto'
               className='border border-gray-300 rounded-md px-4 py-2 w-64 text-black'
-              {...register('email', { required: true })}
+              {...register('model', { required: true })}
             />
-            {errors.email && (
+            {errors.model && (
               <span className='error-message'>Campo obrigatório</span>
             )}
           </div>
 
           <div className='relative pb-4 flex flex-col'>
-            <label htmlFor='password'>Senha</label>
+            <label htmlFor='brand'>Marca</label>
             <input
-              type='password'
-              id='password'
-              placeholder='Senha'
+              type='text'
+              id='brand'
+              placeholder='Marca do produto'
               className='border border-gray-300 rounded-md px-4 py-2 w-64 text-black'
-              {...register('password', { required: true })}
+              {...register('brand', { required: true })}
             />
-            {errors.password && (
+            {errors.brand && (
               <span className='error-message'>Campo obrigatório</span>
             )}
           </div>
 
           <div className='relative pb-4 flex flex-col'>
-            <label htmlFor='confirmPassword'>Confirmar Senha</label>
+            <label htmlFor='color'>Cor</label>
             <input
-              type='password'
-              id='confirmPassword'
-              placeholder='Confirme sua Senha'
+              type='text'
+              id='color'
+              placeholder='Cor do produto'
               className='border border-gray-300 rounded-md px-4 py-2 w-64 text-black'
-              {...register('confirmPassword', { required: true })}
+              {...register('color', { required: true })}
             />
-            {errors.confirmPassword && (
+            {errors.color && (
+              <span className='error-message'>Campo obrigatório</span>
+            )}
+          </div>
+
+          <div className='relative pb-4 flex flex-col'>
+            <label htmlFor='price'>Preço</label>
+            <input
+              type='number'
+              min={0}
+              id='price'
+              placeholder='Preço do produto'
+              className='border border-gray-300 rounded-md px-4 py-2 w-64 text-black'
+              {...register('price', { required: true })}
+            />
+            {errors.price && (
               <span className='error-message'>Campo obrigatório</span>
             )}
           </div>

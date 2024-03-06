@@ -10,18 +10,19 @@ export default class ProductController {
   ) { }
 
   public create = async (req: Request, res: Response): Promise<Response> => {
-    const { email,  ...product} = req.body;
-    const user = await this.userService.getUserByEmail(email);
-    if (!user) {
-      return res.status(400).json({message: "User not found"});
-    }
-    console.log(product);
+    const product = req.body;
     const { status, data } = await this.productService.create(product);
     return res.status(mapStatusHTTP(status)).json(data);
   };
 
-  public getProducts = async (req: Request, res: Response): Promise<Response> => {
+  public getProducts = async (_req: Request, res: Response): Promise<Response> => {
     const { status, data } = await this.productService.getProducts();
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
+
+  public getProduct = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const { status, data } = await this.productService.getProduct(Number(id));
     return res.status(mapStatusHTTP(status)).json(data);
   }
   
@@ -33,7 +34,10 @@ export default class ProductController {
 
   public updateProduct = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
-    const product = req.body;
+    
+    const { id: _id, ...product } = req.body;
+    console.log("id", id)
+    console.log("product", product)
     const { status, data } = await this.productService.updateProduct(Number(id), product);
     return res.status(mapStatusHTTP(status)).json(data);
   }

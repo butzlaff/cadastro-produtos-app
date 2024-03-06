@@ -6,7 +6,6 @@ export default class UserModel implements IUserModel {
   private model = SequelizeUsers;
 
   async create(user: Omit<IUser, "id">): Promise<IUser> {
-    console.log(user);
     return await this.model.create({ ...user });
   }
 

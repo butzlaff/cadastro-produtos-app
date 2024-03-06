@@ -6,7 +6,6 @@ export default class ProductModel implements IProductModel {
   private model = SequelizeProduct;
 
   async create(product: Omit<IProduct, "id">): Promise<IProduct> {
-    console.log(product);
     return await this.model.create(product);
   }
 

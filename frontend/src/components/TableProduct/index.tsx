@@ -1,11 +1,12 @@
+import { ProductService } from '@/Services/Product';
 import Loading from '@/app/loading';
-import { XCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import ModalNewProduct from '../ModalNewProduct';
-import ModalProduct from '../ModalProduct';
+import { useMutation, useQueryClient } from 'react-query';
+import Swal from 'sweetalert2';
+import ProductCard from '../ProductCard';
 type Props = {
   data: IProduct[];
-  handleDelete: (id: number) => void;
 };
 
 export type IProduct = {
@@ -17,14 +18,19 @@ export type IProduct = {
   model: string;
 };
 
-const TableProduct = ({ data, handleDelete }: Props) => {
+const TableProduct = ({ data }: Props) => {
+  const router = useRouter();
+
   const [searched, setSearched] = useState<string>('');
-  const [searchIsEmpty, setSearchIsEmpty] = useState<boolean>(false);
+
   const [filter, setFilter] = useState<keyof Omit<IProduct, 'id'>>('name');
+
   const [filterPrice, setFilterPrice] = useState<'greater' | 'less' | 'equal'>(
     'equal'
   );
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>(data);
+
+  const queryClient = useQueryClient();
 
   useMemo(() => {
     setFilteredProducts(data);
@@ -33,10 +39,7 @@ const TableProduct = ({ data, handleDelete }: Props) => {
   const filterProducts = () => {
     let filteredProd: IProduct[] = [];
     if (searched.trim() === '') {
-      setSearchIsEmpty(true);
-      setTimeout(() => {
-        setSearchIsEmpty(false);
-      }, 3000);
+      setFilteredProducts(data);
       return;
     }
     if (filter === 'price') {
@@ -72,6 +75,24 @@ const TableProduct = ({ data, handleDelete }: Props) => {
     setFilteredProducts(filteredProd);
   };
 
+  const { mutate: handleDelete } = useMutation({
+    mutationFn: async (id: number) => {
+      const service = new ProductService();
+      await service.deleteProduct(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['get_products']);
+      Swal.fire('Deletado com Suceso!');
+    },
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Algo deu errado!',
+      });
+    },
+  });
+
   return (
     <>
       <div className='flex justify-between'>
@@ -91,14 +112,13 @@ const TableProduct = ({ data, handleDelete }: Props) => {
             Pesquisar
           </button>
         </label>
-        <ModalNewProduct />
-        {/* <button className='border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'>
-          + New Product
-        </button> */}
+        <button
+          onClick={() => router.push('/product/new')}
+          className='border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
+        >
+          + Novo Produto
+        </button>
       </div>
-      {searchIsEmpty && (
-        <span className='text-red-500'>*Campo obrigatório</span>
-      )}
 
       <div className='flex text-white flex-row'>
         <label className='mb-2 pl-4'>
@@ -186,50 +206,19 @@ const TableProduct = ({ data, handleDelete }: Props) => {
           </div>
         )}
       </div>
-      {!Array.isArray(filteredProducts) ? (
-        <Loading />
-      ) : (
-        <table className='w-full text-sm text-left min-w-[48rem]'>
-          <thead>
-            <tr className='bg-gray-200'>
-              <th className='py-2 px-2 max-w-[12rem] truncate'>Name</th>
-              <th className='py-2 px-2 max-w-[12rem] truncate'>Brand</th>
-              <th className='py-2 px-2 max-w-[12rem] truncate'>Price</th>
-              <th className='py-2 px-2 max-w-[12rem] truncate'>Color</th>
-              <th className='py-2 px-2 max-w-[3rem] truncate text-center'>
-                Editar/Apagar
-              </th>
-            </tr>
-          </thead>
-          <tbody className='text-xs'>
-            {filteredProducts?.map((product, index) => (
-              <tr
-                key={product.id}
-                className={`${index % 2 === 0 ? 'bg-gray-300' : 'bg-white'}`}
-              >
-                <td className='py-1 px-1 max-w-[12rem] truncate'>
-                  {product.name}
-                </td>
-                <td className='py-1 px-1 max-w-[12rem] truncate'>
-                  {product.brand}
-                </td>
-                <td className='py-1 px-1 max-w-[12rem] truncate'>
-                  {Number(product.price).toFixed(2)}
-                </td>
-                <td className='py-1 px-1 max-w-[12rem] truncate'>
-                  {product.color}
-                </td>
-                <td className='py-1 px-1 max-w-[12rem] truncate text-center flex gap-2 justify-center'>
-                  <ModalProduct key={product.id} product={product} />
-                  <button onClick={() => handleDelete(product.id)}>
-                    <XCircle size={18} stroke='red' />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <div className='grid sm:grid-cols-3'>
+        {!Array.isArray(filteredProducts) ? (
+          <Loading />
+        ) : (
+          filteredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              handleDelete={handleDelete}
+            />
+          ))
+        )}
+      </div>
     </>
   );
 };

@@ -64,7 +64,7 @@ export class ProductService {
   }
 
   public async updateProduct(product: IProduct): Promise<IProduct> {
-    const response = await api.put('/new', product, {
+    const response = await api.put(`/${product.id}`, product, {
       headers: {
         Authorization: `Bearer ${Cookies.get('token')}`,
       },
