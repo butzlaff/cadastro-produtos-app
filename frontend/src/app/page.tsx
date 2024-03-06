@@ -2,34 +2,32 @@
 
 import { ProductService } from '@/Services/Product';
 import TableProduct from '@/components/TableProduct';
+import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Swal from 'sweetalert2';
 
 export default function Home() {
   const queryClient = useQueryClient();
-
-  const { data: products } = useQuery(['get_products'], () => {
+  const router = useRouter();
+  
+  const { data: products } = useQuery(['get_products'], async () => {
     try {
       const service = new ProductService();
-      const products = service.getProducts();
+      const products = await service.getProducts();
       return products;
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Ocorreu algum erro!',
-        timer: 5000,
-      })
+      router.push('/auth/signin')
     }
   });
+  
   const { mutate: handleDelete } = useMutation({
     mutationFn: async (id: number) => {
       const service = new ProductService();
       await service.deleteProduct(id);
     },
     onSuccess: () => {
-      Swal.fire('Deletado com Suceso!');
       queryClient.invalidateQueries(['get_products']);
+      Swal.fire('Deletado com Suceso!');
     },
     onError: () => {
       Swal.fire({

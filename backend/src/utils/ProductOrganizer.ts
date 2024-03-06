@@ -17,7 +17,7 @@ export default class ProductOrganizer {
       // Retorna Estrutura 1
       return productData;
     }
-}
+  }
 
   private organizeProductType2(productData: IProductDetails): IProduct {
     const { name, details, price } = productData;
@@ -31,4 +31,4 @@ export default class ProductOrganizer {
         return data.map((product: any) => ({ name, brand, model, ...product }));
     }).flat();
   }
-}
+};

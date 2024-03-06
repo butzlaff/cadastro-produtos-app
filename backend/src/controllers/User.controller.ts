@@ -10,12 +10,12 @@ export default class UserController {
 
   public login = async (req: Request, res: Response): Promise<Response> => {
     const { username, password } = req.body;
-    const data = await this.userService.login({ username, password });
-    if (data) {
-      res.cookie('token', data, { httpOnly: true });
-      return res.status(mapStatusHTTP(data.status)).json(data.data);
+    const { status, data } = await this.userService.login({ username, password });
+    if ('message' in data) {
+      return res.status(400).json(data);
     }
-    return res.status(400).json({message: "All fields are required"});
+    const { token } = data;
+    return res.status(mapStatusHTTP(status)).json({ username, token });
   };
 
   public create = async (req: Request, res: Response): Promise<Response> => {

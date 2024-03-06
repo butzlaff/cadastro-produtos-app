@@ -13,13 +13,13 @@ export default class ProductService {
     try {
       const productOrganizer = new ProductOrganizer();
       const productOrganized = productOrganizer.organizeProduct(data);
-
       let product;
       if (Array.isArray(productOrganized)) {
         product = await this.productModel.createMany(productOrganized);
       } else {
         product = await this.productModel.create(productOrganized);
       }
+      console.log(product);
 
       return { status: 'CREATED', data: product };
     } catch (error: unknown) {

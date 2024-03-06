@@ -13,6 +13,7 @@ router.post('/new',
 );
 
 router.get('/',
+    Validations.validateToken,
     (req: Request, res: Response) =>
     productController.getProducts(req, res),
 );

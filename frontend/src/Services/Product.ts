@@ -1,62 +1,74 @@
 import { IProduct } from '@/components/TableProduct';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { redirect } from 'next/navigation';
 
+const api = axios.create({
+  baseURL: 'http://localhost:3001/product',
+});
+
+export type CreateProduct = Omit<IProduct, 'id'>;
 
 export class ProductService {
-
-  public async getProducts() : Promise<IProduct[]> {
-    const response = await fetch('http://localhost:3001/product');
-    const data = await response.json();
-    return data;
-  }
-
-  public async getProduct(id: number) : Promise<IProduct> {
-    const response = await fetch(`http://localhost:3001/product/${id}`);
-    const data = await response.json();
-    return data;
-  }
-
-  public async deleteProduct(id: number) : Promise<boolean> {
-    const response = await fetch(`http://localhost:3001/product/${id}`, {
-      method: 'DELETE',
-    });
-    if (response.status === 204) return true;
-    return false;
-  };
-
-  public async createProduct(product: IProduct) : Promise<IProduct | IProduct[]> {
-    const response = await fetch('http://localhost:3001/product/new', {
-      method: 'POST',
+  public async getProducts(): Promise<IProduct[]> {
+    const response = await api.get('/', {
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('token')}`,
       },
-      body: JSON.stringify(product),
     });
-    const data = await response.json();
-    return data;
+    if (response.status === 401) {
+      return redirect('/auth/signin');
+    }
+    return response.data;
   }
 
-  public async createManyProduct(product: IProduct) : Promise<IProduct[]> {
-    const response = await fetch('http://localhost:3001/product/new', {
-      method: 'POST',
+  public async getProduct(id: number): Promise<IProduct> {
+    const response = await api.get(`/${id}`, {
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('token')}` || undefined,
       },
-      body: JSON.stringify(product),
     });
-    const data = await response.json();
-    return data;
+    if (response.status === 401) {
+      return redirect('/auth/signin');
+    }
+    return response.data;
   }
 
-  public async updateProduct(product: IProduct) : Promise<IProduct> {
-    const response = await fetch(`http://localhost:3001/product/${product.id}`, {
-      method: 'PUT',
+  public async deleteProduct(id: number): Promise<boolean> {
+    const response = await api.delete(`/${id}`, {
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Cookies.get('token')}`,
       },
-      body: JSON.stringify(product),
     });
-    const data = await response.json();
-    return data;
+    return response.data;
   }
 
+  public async createProduct(
+    product: CreateProduct
+  ): Promise<IProduct | IProduct[]> {
+    const response = await api.post('/new', product, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    });
+    return response.data;
+  }
+
+  public async createManyProduct(product: IProduct): Promise<IProduct[]> {
+    const response = await api.post('/new', product, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    });
+    return response.data;
+  }
+
+  public async updateProduct(product: IProduct): Promise<IProduct> {
+    const response = await api.put('/new', product, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    });
+    return response.data;
+  }
 }

@@ -3,6 +3,7 @@ import { Login, TUser } from '@/Services/User';
 import { useRouter } from 'next/navigation';
 import { MouseEventHandler } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -11,13 +12,26 @@ const LoginForm = () => {
     router.push('/register');
   };
 
-  const { handleSubmit, register, watch } = useForm<TUser>();
+  const { handleSubmit, register } = useForm<TUser>();
 
   const handleLogin: SubmitHandler<TUser> = async (data) => {
     const user = await Login(data);
-    console.log(user);
     if (user) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login efetuado com sucesso!",
+        showConfirmButton: false,
+        timer: 1500
+      });
       router.push('/');
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Ocorreu algum erro!',
+        timer: 3000,
+      })
     }
   }
 
@@ -30,6 +44,7 @@ const LoginForm = () => {
             type='text'
             className='border border-gray-300 rounded-md px-4 py-2 w-64 text-black'
             { ...register("username", { required: true }) }
+            autoComplete="false"
           />
         </label>
         <label className='mb-2'>

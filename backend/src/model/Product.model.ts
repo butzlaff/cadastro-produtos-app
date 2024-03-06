@@ -2,15 +2,12 @@ import SequelizeProduct from '@/database/models/Product';
 import { IProductModel } from '@interfaces/IProductModel';
 import { IProduct } from '@interfaces/IProducts';
 
-interface AffectedCount {
-  affectedCount: number;
-}
-
 export default class ProductModel implements IProductModel {
   private model = SequelizeProduct;
 
   async create(product: Omit<IProduct, "id">): Promise<IProduct> {
-    return await this.model.create({ ...product });
+    console.log(product);
+    return await this.model.create(product);
   }
 
   async createMany(product: IProduct[]): Promise<IProduct[]> {
@@ -40,7 +37,6 @@ export default class ProductModel implements IProductModel {
   };
 
   async updateProduct(id: number, product: Omit<IProduct, 'id'>): Promise<[number]> {
-    console.log(product);
     return await this.model.update(product, {
       where: {
         id,

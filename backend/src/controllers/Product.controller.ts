@@ -1,14 +1,22 @@
 import ProductService from '@/services/Product.service';
+import UserService from '@/services/User.service';
 import mapStatusHTTP from '@utils/mapStatusHTTP';
 import { Request, Response } from 'express';
 
 export default class ProductController {
   constructor(
     private productService: ProductService = new ProductService(),
+    private userService: UserService = new UserService(),
   ) { }
 
   public create = async (req: Request, res: Response): Promise<Response> => {
-    const { status, data } = await this.productService.create(req.body);
+    const { email,  ...product} = req.body;
+    const user = await this.userService.getUserByEmail(email);
+    if (!user) {
+      return res.status(400).json({message: "User not found"});
+    }
+    console.log(product);
+    const { status, data } = await this.productService.create(product);
     return res.status(mapStatusHTTP(status)).json(data);
   };
 

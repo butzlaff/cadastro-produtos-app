@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { ProductService } from '@/Services/Product';
+import { CreateProduct, ProductService } from '@/Services/Product';
 import { Button, Col, Drawer, Form, Input, Row, Space } from 'antd';
-import { PenSquare } from 'lucide-react';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import Swal from 'sweetalert2';
-import { IProduct } from '../TableProduct';
 
-type Product = {
-  product: IProduct;
-};
-
-const ModalProduct = ({ product }: Product) => {
+const ModalNewProduct = () => {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
-  const [productEdited, setProductEdited] = useState<IProduct>({ ...product });
+  const [productEdited, setProductEdited] = useState<CreateProduct>({
+    name: '',
+    brand: '',
+    price: 0,
+    color: '',
+    model: ''
+  });
 
   const showDrawer = () => {
     setOpen(true);
@@ -28,10 +28,10 @@ const ModalProduct = ({ product }: Product) => {
   const { mutate: handleSubmit, isLoading } = useMutation({
     mutationFn: async () => {
       const service = new ProductService();
-      await service.updateProduct(productEdited);
+      await service.createProduct(productEdited);
     },
     onSuccess: () => {
-      Swal.fire('Editado com Suceso!');
+      Swal.fire('Adicionado com Suceso!');
       queryClient.invalidateQueries(['get_products']);
       onClose();
     },
@@ -47,17 +47,20 @@ const ModalProduct = ({ product }: Product) => {
 
   return (
     <>
-      <button onClick={showDrawer}>
-        <PenSquare size={18} stroke='green' />
+      <button
+        onClick={showDrawer}
+        className='border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
+      >
+        + Novo Produto
       </button>
       <Drawer
-        title={`Editando: ${product.name}`}
+        title={`Adicionar novo produto`}
         width={640}
         onClose={onClose}
         open={open}
         styles={{
           body: {
-            paddingBottom: 80,
+            paddingBottom: 10,
           },
         }}
         extra={
@@ -73,22 +76,21 @@ const ModalProduct = ({ product }: Product) => {
               onClick={() => handleSubmit()}
               loading={isLoading}
             >
-              Atualizar
+              Adicionar
             </Button>
           </Space>
         }
       >
-        <Form 
+        <Form
           layout='vertical'
           initialValues={{
-            ["name"]: product.name,
-            ["brand"]: product.brand,
-            ["price"]: product.price,
-            ["color"]: product.color,
-            ["model"]: product.model,
+            ['name']: '',
+            ['brand']: '',
+            ['price']: '',
+            ['color']: '',
+            ['model']: '',
           }}
         >
-
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -128,6 +130,8 @@ const ModalProduct = ({ product }: Product) => {
                 />
               </Form.Item>
             </Col>
+            </Row>
+            <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name='model'
@@ -149,8 +153,6 @@ const ModalProduct = ({ product }: Product) => {
                 />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name='price'
@@ -176,6 +178,8 @@ const ModalProduct = ({ product }: Product) => {
                 />
               </Form.Item>
             </Col>
+            </Row>
+            <Row gutter={12}>
             <Col span={12}>
               <Form.Item
                 name='color'
@@ -207,4 +211,4 @@ const ModalProduct = ({ product }: Product) => {
   );
 };
 
-export default ModalProduct;
+export default ModalNewProduct;

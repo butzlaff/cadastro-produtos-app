@@ -1,10 +1,14 @@
 import { ServiceResponse } from '@/interfaces/Response';
-import { IToken } from '@interfaces/IToken';
 import IUser, { IUserLogin } from '@interfaces/IUser';
 import { IUserModel } from '@interfaces/IUserModel';
 import UserModel from '@model/User.model';
 import * as bcrypt from 'bcryptjs';
 import JWT from '../utils/JWT';
+
+export interface ResponseLogin {
+    email: string;
+    token: string;
+}
 
 export default class UserService {
   constructor(private userModel: IUserModel = new UserModel()) {}
@@ -12,14 +16,15 @@ export default class UserService {
   public async login({
     username,
     password,
-  }: IUserLogin): Promise<ServiceResponse<IToken> | null> {
+  }: IUserLogin): Promise<ServiceResponse<ResponseLogin>> {
     const user = await this.userModel.findByUsername(username);
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      return null;
+      return { status: 'INVALID_DATA', data: { message: "All fields are required"} };
     }
     const { email } = user;
     const token = JWT.sign({ email, username });
-    return { status: 'SUCCESSFUL', data: token };
+    const response = { email, token };
+    return { status: 'SUCCESSFUL', data: response };
   }
 
   public async create(
@@ -43,5 +48,9 @@ export default class UserService {
       password: passwordEncripted,
     });
     return { status: 'CREATED', data: newUser };
+  }
+
+  public async getUserByEmail(email: string): Promise<IUser | null> {
+    return await this.userModel.findByEmail(email);
   }
 }
