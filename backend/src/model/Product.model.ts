@@ -1,6 +1,6 @@
-import SequelizeProduct from '@/database/models/Product';
-import { IProductModel } from '@interfaces/IProductModel';
-import { IProduct } from '@interfaces/IProducts';
+import SequelizeProduct from '../database/models/Product';
+import { IProductModel } from '../interfaces/IProductModel';
+import { IProduct } from '../interfaces/IProducts';
 
 export default class ProductModel implements IProductModel {
   private model = SequelizeProduct;

@@ -1,5 +1,5 @@
-import { IProduct } from '@interfaces/IProducts';
 import { DataTypes, Model, QueryInterface } from 'sequelize';
+import { IProduct } from '../../interfaces/IProducts';
 
 export default {
   up(queryInterface: QueryInterface) {

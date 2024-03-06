@@ -3,7 +3,7 @@ import {
   IProductData,
   IProductDetails,
   TProducts
-} from '@/interfaces/IProducts';
+} from '../interfaces/IProducts';
 
 export default class ProductOrganizer {
   public organizeProduct(productData: TProducts): IProduct | IProduct[] {

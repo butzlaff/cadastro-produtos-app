@@ -1,8 +1,8 @@
-import { ServiceResponse } from '@/interfaces/Response';
-import IUser, { IUserLogin } from '@interfaces/IUser';
-import { IUserModel } from '@interfaces/IUserModel';
-import UserModel from '@model/User.model';
 import * as bcrypt from 'bcryptjs';
+import IUser, { IUserLogin } from '../interfaces/IUser';
+import { IUserModel } from '../interfaces/IUserModel';
+import { ServiceResponse } from '../interfaces/Response';
+import UserModel from '../model/User.model';
 import JWT from '../utils/JWT';
 
 export interface ResponseLogin {

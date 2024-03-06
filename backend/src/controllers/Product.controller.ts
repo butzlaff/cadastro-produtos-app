@@ -1,7 +1,7 @@
-import UserService from '@/services/User.service';
-import mapStatusHTTP from '@utils/mapStatusHTTP';
 import { Request, Response } from 'express';
 import ProductService from '../services/Product.service';
+import UserService from '../services/User.service';
+import mapStatusHTTP from '../utils/mapStatusHTTP';
 
 export default class ProductController {
   constructor(

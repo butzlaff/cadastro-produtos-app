@@ -1,8 +1,8 @@
-import { IProduct, TProducts } from '@/interfaces/IProducts';
-import { ServiceResponse } from '@/interfaces/Response';
-import ProductModel from '@/model/Product.model';
-import ProductOrganizer from '@/utils/ProductOrganizer';
-import { IProductModel } from '@interfaces/IProductModel';
+import { IProductModel } from '../interfaces/IProductModel';
+import { IProduct, TProducts } from '../interfaces/IProducts';
+import { ServiceResponse } from '../interfaces/Response';
+import ProductModel from '../model/Product.model';
+import ProductOrganizer from '../utils/ProductOrganizer';
 
 export default class ProductService {
   constructor(private productModel: IProductModel = new ProductModel()) {}
