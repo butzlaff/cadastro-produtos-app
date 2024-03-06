@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL: process.env.ENDPOINT_USER,
+  baseURL: process.env.ENDPOINT_USER || "https://lexart-desafio-api.vercel.app/user",
 });
 
 export type TUser = {

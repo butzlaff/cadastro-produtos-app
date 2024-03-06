@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { redirect } from 'next/navigation';
 
 const api = axios.create({
-  baseURL: process.env.ENDPOINT_PRODUCT,
+  baseURL: process.env.ENDPOINT_PRODUCT || "https://lexart-desafio-api.vercel.app/product",
 });
 
 export type CreateProduct = Omit<IProduct, 'id'>;
