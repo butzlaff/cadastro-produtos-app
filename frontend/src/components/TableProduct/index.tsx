@@ -112,12 +112,20 @@ const TableProduct = ({ data }: Props) => {
             Pesquisar
           </button>
         </label>
+        <div>
         <button
           onClick={() => router.push('/product/new')}
-          className='border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
+          className='mr-2 border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
         >
           + Novo Produto
         </button>
+        <button
+          onClick={() => router.push('/product/mult-create')}
+          className='border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
+        >
+          + Criar Multiplos
+        </button>
+        </div>
       </div>
 
       <div className='flex text-white flex-row'>

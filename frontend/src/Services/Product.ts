@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { redirect } from 'next/navigation';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/product',
+  baseURL: process.env.ENDPOINT_PRODUCT || 'http://localhost:3001/product',
 });
 
 export type CreateProduct = Omit<IProduct, 'id'>;

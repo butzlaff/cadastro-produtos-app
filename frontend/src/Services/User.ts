@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/user',
+  baseURL: process.env.ENDPOINT_USER || 'http://localhost:3001/user',
 });
 
 export type TUser = {
