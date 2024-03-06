@@ -7,6 +7,7 @@ const config: Options = {
   host: process.env.POSTGRES_HOST || 'localhost',
   port: Number(process.env.POSTGRES_PORT) || 5432,
   dialect: 'postgres',
+  dialectModule: require("pg"), // I've added this.
   logging: false,
   dialectOptions: {
     ssl: process.env.NODE_ENV === 'production',
