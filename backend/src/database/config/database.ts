@@ -8,8 +8,8 @@ const config: Options = {
   port: Number(process.env.POSTGRES_PORT) || 5432,
   dialect: 'postgres',
   logging: false,
-  ssl: true,
   dialectOptions: {
+    ssl: process.env.NODE_ENV === 'production',
     idle_in_transaction_session_timeout: 60,
   },
 }
