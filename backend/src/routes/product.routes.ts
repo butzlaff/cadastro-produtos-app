@@ -18,11 +18,13 @@ router.get('/:id', Validations.validateToken, (req: Request, res: Response) =>
   productController.getProduct(req, res)
 );
 
-router.delete('/:id', (req: Request, res: Response) =>
-  productController.deleteProduct(req, res)
+router.delete(
+  '/:id',
+  Validations.validateToken,
+  (req: Request, res: Response) => productController.deleteProduct(req, res)
 );
 
-router.put('/:id', (req: Request, res: Response) =>
+router.put('/:id', Validations.validateToken, (req: Request, res: Response) =>
   productController.updateProduct(req, res)
 );
 

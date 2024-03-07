@@ -1,11 +1,14 @@
 'use client';
-import { CreateProduct } from '@/Services/Product';
+import { CreateProduct, ProductService } from '@/Services/Product';
 import { nanoid } from 'nanoid';
+import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from 'react-query';
+import Swal from 'sweetalert2';
 
-interface MultProducts {
+export interface MultProducts {
   name: string;
   brand: string;
   model: string;
@@ -23,12 +26,13 @@ type FormColor = {
 const ProductForm = () => {
   const [products, setProducts] = useState<MultProducts[]>([]);
   const [lockInputs, setLockInputs] = useState(false);
+  const [productFinished, setProductFinished] = useState(false);
   const [productPrice, setProductPrice] = useState('');
   const [productColor, setProductColor] = useState('');
   const [productColors, setProductColors] = useState<FormColor[]>([]);
-
+  const router = useRouter();
   const { reset, register, watch } = useForm<CreateProduct>();
-
+  const queryClient = useQueryClient();
   const addColor = () => {
     const { price, color } = watch();
     const data = {
@@ -37,7 +41,30 @@ const ProductForm = () => {
     };
     setProductColors((productColors) => [...productColors, data]);
     setLockInputs(true);
+    setProductFinished(false);
   };
+
+  const cancelAction = () => {
+    setProducts([]);
+    setLockInputs(false);
+    setProductFinished(false);
+    setProductPrice('');
+    setProductColor('');
+    setProductColors([]);
+    resetValues();
+    router.push('/');
+  };
+
+  const resetValues = () => {
+    reset({
+      brand: '',
+      name: '',
+      model: '',
+      color: '',
+      price: 0,
+    });
+  };
+
   const addProduct = () => {
     const { name, brand, model } = watch();
     const newProduct = {
@@ -46,9 +73,11 @@ const ProductForm = () => {
       model: model,
       data: productColors.map((item) => item),
     };
+    setProductFinished(true);
     setProducts((state) => [...state, newProduct]);
     setLockInputs(false);
     setProductColors([]);
+    resetValues();
   };
   const addNewProductColor = () => {
     if (productColor && productPrice) {
@@ -60,17 +89,29 @@ const ProductForm = () => {
   };
 
   const sendProducts = () => {
-    console.log(products);
     setProducts([]);
     setProductColors([]);
-    reset({
-      brand: '',
-      name: '',
-      model: '',
-      color: '',
-      price: 0,
-    });
+    resetValues();
   };
+
+  const { mutate: createProduct } = useMutation({
+    mutationFn: async () => {
+      const service = new ProductService();
+      await service.createManyProduct(products);
+      sendProducts();
+    },
+    onSuccess: () => {
+      Swal.fire('Cadastrado com sucesso!');
+      queryClient.invalidateQueries(['get_products']);
+    },
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Ocorreu algum erro!',
+      });
+    },
+  });
 
   return (
     <main className='flex items-center justify-center p-4'>
@@ -136,32 +177,29 @@ const ProductForm = () => {
                 disabled={lockInputs}
               />
             </div>
-
             <div className='flex justify-center gap-2 w-full mt-4'>
-              <button
-                onClick={() => addColor()}
-                type='button'
-                className='bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition-colors duration-300 w-24'
-              >
-                Salvar
-              </button>
+              {!lockInputs && (
+                <button
+                  onClick={() => addColor()}
+                  type='button'
+                  className='bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition-colors duration-300 w-24'
+                >
+                  Salvar
+                </button>
+              )}
               {lockInputs && (
                 <button
                   onClick={addProduct}
                   type='button'
-                  className='bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 w-24'
+                  className='bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 w-44'
                 >
-                  Novo Produto
+                  Concluir cadastro
                 </button>
               )}
               <button
                 type='button'
-                value='Cancelar'
                 className='bg-red-500 text-white font-semibold py-2 rounded-md hover:bg-red-600 transition-colors duration-300 w-24'
-                onClick={() => {
-                  setProductColor('');
-                  setProductPrice('');
-                }}
+                onClick={() => cancelAction()}
               >
                 Cancelar
               </button>
@@ -206,9 +244,10 @@ const ProductForm = () => {
           </button>
         </div>
         <button
-          onClick={sendProducts}
+          disabled={!productFinished}
+          onClick={() => createProduct()}
           type='button'
-          className='bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition-colors duration-300 w-full mt-4'
+          className='bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition-colors duration-300 w-full mt-4 disabled:bg-gray-600'
         >
           Cadastrar produtos
         </button>

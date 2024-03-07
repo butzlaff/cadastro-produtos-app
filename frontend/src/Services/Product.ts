@@ -1,3 +1,4 @@
+import { MultProducts } from '@/app/product/mult-create/page';
 import { IProduct } from '@/components/ProductList';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -75,7 +76,7 @@ export class ProductService {
   }
 
 
-  public async createManyProduct(product: IProduct): Promise<IProduct[]> {
+  public async createManyProduct(product: MultProducts[]): Promise<IProduct[]> {
     const response = await api.post('/new', product, {
       headers: {
         Authorization: `Bearer ${Cookies.get('token')}`,
