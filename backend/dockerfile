@@ -10,6 +10,7 @@ COPY package*.json ./
 # Instalar as dependências Node
 RUN npm install
 
+
 # Copiar o restante dos arquivos da aplicação para o container
 COPY . .
 
@@ -18,4 +19,4 @@ EXPOSE 3001
 
 # Configura os comandos para iniciar a aplicação
 ENTRYPOINT ["npm", "run"]
-CMD [ "dev" ]
+CMD [ "prestart" ]
