@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",
-    "antd": "^5.15.0",
     "axios": "^1.6.7",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.344.0",
