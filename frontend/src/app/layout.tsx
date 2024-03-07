@@ -1,3 +1,4 @@
+import AppBar from '@/components/AppBar';
 import QueryContext from '@/context/UseQuery';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <QueryContext >
       <body className={inter.className}>
+        <AppBar />
         <main className='h-full bg-slate-800 flex justify-center items-center min-h-screen'>
           <div className='bg-white dark:bg-slate-900/70 rounded-lg px-10 py-10 ring-1 ring-slate-900/5 shadow-xl flex justify-center items-center'>
             {children}
