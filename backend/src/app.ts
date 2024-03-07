@@ -11,7 +11,7 @@ class App {
     this.app = express();
 
     this.config();
-    
+
     this.configureCookies();
 
     this.routes();
@@ -46,7 +46,7 @@ class App {
       })
     );
 
-    this.app.use(cookieParser())
+    this.app.use(cookieParser());
   }
 
   public start(PORT: string | number): void {
@@ -55,3 +55,4 @@ class App {
 }
 
 export { App };
+export const { app } = new App(); // Usada apenas pelos tests

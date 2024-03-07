@@ -8,7 +8,6 @@ const AppBar = () => {
   const router = useRouter();
   const setUser = useUserStore((state: any) => state.setUser);
   const username = useUserStore((state: any) => state.user);
-  console.log(username);
   const signOut = () => {
     Cookies.remove('token');
     setUser(null);
