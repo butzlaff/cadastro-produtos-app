@@ -44,11 +44,11 @@ export async function Register(user: TUser) {
 
 export async function getSession() {
   const cookie = Cookies.get('token');
-  const response = await api.get('/user', {
+  const response = await api.get<{ username: string, email: string}>('/', {
     headers: {
       Authorization: `Bearer ${cookie}` || undefined,
     }
   });
-  const data = await response.data;
+  const data = response.data;
   return data;
 }

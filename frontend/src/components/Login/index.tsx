@@ -19,6 +19,8 @@ const LoginForm = () => {
   const handleLogin: SubmitHandler<TUser> = async (data) => {
     const user = await Login(data);
     if ('username' in user) {
+      setUser(user.username)
+      router.push('/');
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -26,8 +28,6 @@ const LoginForm = () => {
         showConfirmButton: false,
         timer: 1500
       });
-      setUser(user.username)
-      router.push('/');
     } else {
       Swal.fire({
         icon: 'error',

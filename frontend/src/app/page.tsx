@@ -1,26 +1,33 @@
-"use client"
+'use client';
 
 import { ProductService } from '@/Services/Product';
+import { getSession } from '@/Services/User';
 import TableProduct from '@/components/TableProduct';
+import useUserStore from '@/context/useUserStore';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
 
 export default function Home() {
   const router = useRouter();
-  
+  const setUser = useUserStore((state: any) => state.setUser)
   const { data: products } = useQuery(['get_products'], async () => {
     try {
       const service = new ProductService();
-      const products = await service.getProducts();
+      const [products, user] = await Promise.all([
+        service.getProducts(),
+        getSession(),
+      ]);
+      setUser(user);
       return products;
+      
     } catch (error) {
-      router.push('/auth/signin')
+      router.push('/auth/signin');
     }
   });
-  
-  return (   
+
+  return (
     <div className='flex flex-col'>
-    { products && <TableProduct data={ products }  /> }
+      {products && <TableProduct data={products} />}
     </div>
   );
 }
