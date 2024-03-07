@@ -2,8 +2,7 @@ import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL:
-  process.env.ENDPOINT_USER || 'https://lexart-desafio-api.vercel.app/user',
+  baseURL: process.env.ENDPOINT_USER || "https://lexart-desafio-api.vercel.app/user",
 });
 
 export type TUser = {
@@ -25,7 +24,7 @@ export async function Login(
 ): Promise<LoginResponse | ErrorResponse> {
   try {
     const response = await api.post<LoginResponse, any>('/login', user);
-    const { token, username } = response.data;
+    const { token } = response.data;
     Cookies.set('token', token, { expires: 7 });
     return response.data;
   } catch (error) {
@@ -44,10 +43,10 @@ export async function Register(user: TUser) {
 
 export async function getSession() {
   const cookie = Cookies.get('token');
-  const response = await api.get<{ username: string, email: string}>('/', {
+  const response = await api.get<{ username: string; email: string }>('/', {
     headers: {
       Authorization: `Bearer ${cookie}` || undefined,
-    }
+    },
   });
   const data = response.data;
   return data;

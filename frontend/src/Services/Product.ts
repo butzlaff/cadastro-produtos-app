@@ -5,7 +5,9 @@ import Cookies from 'js-cookie';
 import { redirect } from 'next/navigation';
 
 const api = axios.create({
-  baseURL: process.env.ENDPOINT_PRODUCT || "https://lexart-desafio-api.vercel.app/product",
+  baseURL:
+    process.env.ENDPOINT_PRODUCT ||
+    'https://lexart-desafio-api.vercel.app/product',
 });
 
 export type CreateProduct = Omit<IProduct, 'id'>;
@@ -13,18 +15,18 @@ export type ProductDetails = {
   name: string;
   price: number;
   details: {
-    model:string;
+    model: string;
     brand: string;
-    color:string;
-  }
-}
+    color: string;
+  };
+};
 
 export class ProductService {
   public async getProducts(): Promise<IProduct[]> {
     const response = await api.get('/', {
       headers: {
         Authorization: `Bearer ${Cookies.get('token')}`,
-      }
+      },
     });
     if (response.status === 401) {
       return redirect('/auth/signin');
@@ -74,7 +76,6 @@ export class ProductService {
     });
     return response.data;
   }
-
 
   public async createManyProduct(product: MultProducts[]): Promise<IProduct[]> {
     const response = await api.post('/new', product, {

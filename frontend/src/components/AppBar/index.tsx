@@ -17,7 +17,7 @@ const AppBar = () => {
     <header className='bg-gray-800 p-2 w-full h-[4.525rem] max-h-[4.525rem] justify-between shadow-md truncate pr-4 pt-4'>
       <div className='flex text-sm justify-between'>
         {!username ? (
-          <div>
+          <div className='flex self-end'>
             <button
               onClick={() => router.push('/auth/signin')}
               className='border-[1px] border-blue-50 rounded-md bg-blue-500 font-semibold px-3 py-2 text-base text-blue-50
@@ -28,7 +28,7 @@ const AppBar = () => {
           </div>
         ) : (
           <>
-            <div className='flex self-start'>
+            <div className='flex self-start gap-4'>
             <button
               onClick={() => router.push('/product/new')}
               className='border-[1px] border-blue-50 rounded-md bg-blue-500 font-semibold px-3 py-2 text-base text-blue-50
@@ -41,7 +41,7 @@ const AppBar = () => {
               className='border-[1px] border-blue-50 rounded-md bg-blue-500 font-semibold px-3 py-2 text-base text-blue-50
                 hover:bg-blue-50 hover:border-blue-600 hover:text-blue-500 transition-all duration-300 ease-in-out'
             >
-              Produtos
+              Principal
             </button>
             </div>
             <div className='flex items-baseline self-end'>
