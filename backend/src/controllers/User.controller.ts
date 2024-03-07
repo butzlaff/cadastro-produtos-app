@@ -26,4 +26,16 @@ export default class UserController {
     const { status } = await this.userService.create(result.data);
     return res.status(mapStatusHTTP(status)).json(null);
   };
+
+  public getUser = async (req: Request, res: Response): Promise<Response> => {
+    const { email } = req.body;
+
+    const user = await this.userService.getUserByEmail(email);
+    if (user) {
+      const { password, username, email } = user;
+      return res.status(200).json({ username, email });
+    }
+
+    return res.status(404).json(null);
+  }
 }

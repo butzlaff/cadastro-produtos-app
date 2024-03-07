@@ -14,7 +14,7 @@ export class ProductService {
     const response = await api.get('/', {
       headers: {
         Authorization: `Bearer ${Cookies.get('token')}`,
-      },
+      }
     });
     if (response.status === 401) {
       return redirect('/auth/signin');

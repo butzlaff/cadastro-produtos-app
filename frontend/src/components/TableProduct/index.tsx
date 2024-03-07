@@ -155,6 +155,19 @@ const TableProduct = ({ data }: Props) => {
           />
         </label>
         <label className='mb-2 pl-4'>
+          <span>Model</span>
+          <input
+            type='radio'
+            name='product'
+            className='border border-gray-300 rounded-md px-4 py-2 text-black'
+            onChange={(e) => {
+              setFilter('model');
+            }}
+            value='model'
+            defaultChecked
+          />
+        </label>
+        <label className='mb-2 pl-4'>
           <span>Price</span>
           <input
             type='radio'

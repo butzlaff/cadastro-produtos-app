@@ -1,5 +1,6 @@
 'use client';
 import { Login, TUser } from '@/Services/User';
+import useUserStore from '@/context/useUserStore';
 import { useRouter } from 'next/navigation';
 import { MouseEventHandler } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -13,10 +14,11 @@ const LoginForm = () => {
   };
 
   const { handleSubmit, register } = useForm<TUser>();
-
+  const setUser = useUserStore((state: any) => state.setUser);
+  
   const handleLogin: SubmitHandler<TUser> = async (data) => {
     const user = await Login(data);
-    if (user) {
+    if ('username' in user) {
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -24,6 +26,7 @@ const LoginForm = () => {
         showConfirmButton: false,
         timer: 1500
       });
+      setUser(user.username)
       router.push('/');
     } else {
       Swal.fire({
