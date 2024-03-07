@@ -1,7 +1,7 @@
 'use client';
 
 import { ProductService } from '@/Services/Product';
-import { IProduct } from '@/components/TableProduct';
+import { IProduct } from '@/components/ProductList';
 import { useParams, useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
@@ -21,7 +21,6 @@ export default function EditProduct() {
       enabled: !!id,
     }
   );
-  console.log(product);
   const {
     register,
     handleSubmit,

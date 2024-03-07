@@ -28,8 +28,8 @@ const AppBar = () => {
             </button>
           </>
         ) : (
-          <div>
-            <p className='text-md text-center truncate text-gray-50 font-semibold'>
+          <div className='flex items-baseline'>
+            <p className='text-md text-center truncate text-gray-50 font-semibold mr-4'>
               Bem vindo, {username}
             </p>
             <button

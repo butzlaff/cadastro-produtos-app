@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { IProduct } from '../TableProduct';
+import { IProduct } from '../ProductList';
 
 type HandleDelete = (id: number) => void;
 
@@ -25,6 +25,12 @@ const ProductCard: React.FC<{
         <p className='text-gray-700 text-base'>
           <span className='font-semibold'>Model:</span> {product.model}
         </p>
+        <button
+          className='bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 w-full mt-2'
+          onClick={() => router.push(`/product/createclone/${product.id}`)}
+        >
+          Clonar Produto
+        </button>
         <button
           className='bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition-colors duration-300 w-full mt-2'
           onClick={() => router.push(`/product/edit/${product.id}`)}

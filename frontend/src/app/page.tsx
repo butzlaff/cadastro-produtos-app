@@ -2,7 +2,7 @@
 
 import { ProductService } from '@/Services/Product';
 import { getSession } from '@/Services/User';
-import TableProduct from '@/components/TableProduct';
+import TableProduct from '@/components/ProductList';
 import useUserStore from '@/context/useUserStore';
 import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
@@ -17,7 +17,7 @@ export default function Home() {
         service.getProducts(),
         getSession(),
       ]);
-      setUser(user);
+      setUser(user.username);
       return products;
       
     } catch (error) {

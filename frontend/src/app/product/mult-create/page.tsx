@@ -44,12 +44,12 @@ const ProductForm = () => {
       name: name,
       brand: brand,
       model: model,
-      data: productColors.map(item => item),
+      data: productColors.map((item) => item),
     };
     setProducts((state) => [...state, newProduct]);
     setLockInputs(false);
     setProductColors([]);
-  }
+  };
   const addNewProductColor = () => {
     if (productColor && productPrice) {
       const newColor = { color: productColor, price: parseFloat(productPrice) };
@@ -77,9 +77,7 @@ const ProductForm = () => {
       <div className='flex flex-col gap-4 w-full text-white'>
         <h2 className='text-2xl text-center font-bold'>Cadastro de Celular</h2>
         <div className='flex justify-center'>
-          <form
-            className='flex flex-col w-[50%]'
-          >
+          <form className='flex flex-col w-[50%]'>
             <div className='relative pb-4 flex flex-col'>
               <label htmlFor='name'>Nome: </label>
               <input
@@ -131,8 +129,6 @@ const ProductForm = () => {
             <div className='relative pb-4 flex flex-col'>
               <label htmlFor='price'>Preço</label>
               <input
-                type='number'
-                min={0}
                 id='price'
                 placeholder='Preço do produto'
                 className='border border-gray-300 rounded-md px-4 py-2 w-64 text-black'
@@ -149,14 +145,15 @@ const ProductForm = () => {
               >
                 Salvar
               </button>
-              <button
-                onClick={ addProduct }
-                type='button'
-                className='bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 w-24'
-              >
-                Novo Produto
-              </button>
-
+              {lockInputs && (
+                <button
+                  onClick={addProduct}
+                  type='button'
+                  className='bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 w-24'
+                >
+                  Novo Produto
+                </button>
+              )}
               <button
                 type='button'
                 value='Cancelar'
@@ -180,7 +177,6 @@ const ProductForm = () => {
             </ul>
           </div>
         </div>
-
 
         <div>
           <h2>Cores</h2>
@@ -210,7 +206,7 @@ const ProductForm = () => {
           </button>
         </div>
         <button
-          onClick={ sendProducts }
+          onClick={sendProducts}
           type='button'
           className='bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600 transition-colors duration-300 w-full mt-4'
         >

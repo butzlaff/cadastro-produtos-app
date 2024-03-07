@@ -1,4 +1,4 @@
-import { IProduct } from '@/components/TableProduct';
+import { IProduct } from '@/components/ProductList';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { redirect } from 'next/navigation';
@@ -8,6 +8,15 @@ const api = axios.create({
 });
 
 export type CreateProduct = Omit<IProduct, 'id'>;
+export type ProductDetails = {
+  name: string;
+  price: number;
+  details: {
+    model:string;
+    brand: string;
+    color:string;
+  }
+}
 
 export class ProductService {
   public async getProducts(): Promise<IProduct[]> {
@@ -53,6 +62,18 @@ export class ProductService {
     });
     return response.data;
   }
+
+  public async createProductDetails(
+    product: ProductDetails
+  ): Promise<IProduct> {
+    const response = await api.post('/new', product, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    });
+    return response.data;
+  }
+
 
   public async createManyProduct(product: IProduct): Promise<IProduct[]> {
     const response = await api.post('/new', product, {
