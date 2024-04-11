@@ -19,7 +19,6 @@ export default class ProductService {
       } else {
         product = await this.productModel.create(productOrganized);
       }
-      console.log(productOrganized);
 
       return { status: 'CREATED', data: product };
     } catch (error: unknown) {

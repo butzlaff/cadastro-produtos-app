@@ -2,14 +2,13 @@ import {
   IProduct,
   IProductData,
   IProductDetails,
-  TProducts
+  TProducts,
 } from '../interfaces/IProducts';
 
 export default class ProductOrganizer {
   public organizeProduct(productData: TProducts): IProduct | IProduct[] {
     if (Array.isArray(productData)) {
       // Organiza Estrutura 3
-      console.log("oi")
       return this.organizeProductType3(productData);
     } else if ('details' in productData) {
       // Organiza Estrutura 2
@@ -27,10 +26,11 @@ export default class ProductOrganizer {
   }
 
   private organizeProductType3(productsData: IProductData[]): IProduct[] {
-    console.log(productsData)
-    return productsData.map(productData => {
+    return productsData
+      .map((productData) => {
         const { name, brand, model, data } = productData;
         return data.map((product: any) => ({ name, brand, model, ...product }));
-    }).flat();
+      })
+      .flat();
   }
-};
+}

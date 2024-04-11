@@ -4,13 +4,15 @@ import UserService from '../services/User.service';
 import mapStatusHTTP from '../utils/mapStatusHTTP';
 
 export default class UserController {
-  constructor(
-    private userService: UserService = new UserService(),
-  ) { }
+  constructor(private userService: UserService = new UserService()) {}
 
   public login = async (req: Request, res: Response): Promise<Response> => {
     const { username, password } = req.body;
-    const { status, data } = await this.userService.login({ username, password });
+
+    const { status, data } = await this.userService.login({
+      username,
+      password,
+    });
     if ('message' in data) {
       return res.status(400).json(data);
     }
@@ -21,7 +23,7 @@ export default class UserController {
   public create = async (req: Request, res: Response): Promise<Response> => {
     const result = userSchema.safeParse(req.body);
     if (!result.success) {
-      return res.status(400).json({message: "All fields are required"});
+      return res.status(400).json({ message: 'All fields are required' });
     }
     const { status } = await this.userService.create(result.data);
     return res.status(mapStatusHTTP(status)).json(null);
@@ -32,10 +34,10 @@ export default class UserController {
 
     const user = await this.userService.getUserByEmail(email);
     if (user) {
-      const { password, username, email } = user;
+      const { username, email } = user;
       return res.status(200).json({ username, email });
     }
 
     return res.status(404).json(null);
-  }
+  };
 }

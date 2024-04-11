@@ -3,11 +3,11 @@ import { Options } from 'sequelize';
 const config: Options = {
   username: process.env.POSTGRES_USER || 'postgres',
   password: process.env.POSTGRES_PASS || 'mysecret',
-  database: process.env.POSTGRES_DB || 'lexartlabs',
+  database: process.env.POSTGRES_DB || 'myapp',
   host: process.env.POSTGRES_HOST || 'localhost',
   port: Number(process.env.POSTGRES_PORT) || 5432,
   dialect: 'postgres',
-  dialectModule: require("pg"), // I've added this.
+  dialectModule: require("pg"),
   logging: false,
   dialectOptions: {
     ssl: process.env.NODE_ENV === 'production',

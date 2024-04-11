@@ -16,7 +16,7 @@ class App {
 
     this.routes();
 
-    this.app.get('/', (req, res) => res.json({ ok: true }));
+    this.app.get('/', (req, res) => res.json({ status: 'Server are running' }));
   }
 
   private config(): void {
