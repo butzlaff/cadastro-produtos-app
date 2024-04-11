@@ -1,4 +1,4 @@
-import { ProductService } from '@/Services/Product';
+import { deleteProduct } from '@/Services/Product';
 import Loading from '@/app/loading';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -77,8 +77,7 @@ const TableProduct = ({ data }: Props) => {
 
   const { mutate: handleDelete } = useMutation({
     mutationFn: async (id: number) => {
-      const service = new ProductService();
-      await service.deleteProduct(id);
+      await deleteProduct(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['get_products']);
@@ -92,7 +91,6 @@ const TableProduct = ({ data }: Props) => {
       });
     },
   });
-
   return (
     <>
       <div className='flex justify-between'>
@@ -113,18 +111,18 @@ const TableProduct = ({ data }: Props) => {
           </button>
         </label>
         <div>
-        <button
-          onClick={() => router.push('/product/new')}
-          className='mr-2 border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
-        >
-          + Novo Produto
-        </button>
-        <button
-          onClick={() => router.push('/product/mult-create')}
-          className='border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
-        >
-          + Criar Multiplos
-        </button>
+          <button
+            onClick={() => router.push('/product/new')}
+            className='mr-2 border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
+          >
+            + Novo Produto
+          </button>
+          <button
+            onClick={() => router.push('/product/mult-create')}
+            className='border border-gray-300 rounded-md px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 h-12 self-center'
+          >
+            + Criar Multiplos
+          </button>
         </div>
       </div>
 
@@ -228,6 +226,11 @@ const TableProduct = ({ data }: Props) => {
         )}
       </div>
       <div className='grid sm:grid-cols-3'>
+
+        {data.length === 0 && 
+          <p className='text-xl text-white mt-8 align-center'>Nenhum Produto contrado</p>
+        }
+
         {!Array.isArray(filteredProducts) ? (
           <Loading />
         ) : (

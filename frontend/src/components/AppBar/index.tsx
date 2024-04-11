@@ -1,18 +1,39 @@
 'use client';
 
+import { Logout, getSession } from '@/Services/User';
 import useUserStore from '@/context/useUserStore';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
 
 const AppBar = () => {
   const router = useRouter();
   const setUser = useUserStore((state: any) => state.setUser);
   const username = useUserStore((state: any) => state.user);
+
+  const getUserSession = useCallback(async () => {
+    const user = await getSession();
+    return user;
+  }, []);
+
+  useEffect(() => {
+    const fetchUserSession = async () => {
+      const user = await getUserSession();
+      if (user.username) {
+        return setUser(user.username);
+      }
+      setUser(null);
+    };
+  
+    fetchUserSession();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const signOut = () => {
-    Cookies.remove('token');
+    Logout();
     setUser(null);
     router.push('/auth/signin');
   };
+  
   return (
     <header className='bg-gray-800 p-2 w-full h-[4.525rem] max-h-[4.525rem] justify-between shadow-md truncate pr-4 pt-4'>
       <div className='flex text-sm justify-between'>

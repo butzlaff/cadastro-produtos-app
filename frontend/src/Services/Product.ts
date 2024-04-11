@@ -1,13 +1,13 @@
+'use server';
+
 import { MultProducts } from '@/app/product/mult-create/page';
 import { IProduct } from '@/components/ProductList';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 const api = axios.create({
-  baseURL:
-    process.env.ENDPOINT_PRODUCT ||
-    'https://lexart-desafio-api.vercel.app/product',
+  baseURL: process.env.ENDPOINT_PRODUCT || 'http://localhost:3001/product',
 });
 
 export type CreateProduct = Omit<IProduct, 'id'>;
@@ -21,77 +21,85 @@ export type ProductDetails = {
   };
 };
 
-export class ProductService {
-  public async getProducts(): Promise<IProduct[]> {
-    const response = await api.get('/', {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    });
-    if (response.status === 401) {
-      return redirect('/auth/signin');
-    }
-    return response.data;
+export async function getProducts(): Promise<IProduct[]> {
+  const cookie = cookies().get('token')?.value;
+  const response = await api.get('/', {
+    headers: {
+      Authorization: `Bearer ${cookie}`,
+    },
+  });
+  if (response.status === 401) {
+    return redirect('/auth/signin');
   }
+  return response.data;
+}
 
-  public async getProduct(id: number): Promise<IProduct> {
-    const response = await api.get(`/${id}`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}` || undefined,
-      },
-    });
-    if (response.status === 401) {
-      return redirect('/auth/signin');
-    }
-    return response.data;
-  }
+export async function getProduct(id: number): Promise<IProduct> {
+  const cookie = cookies().get('token')?.value;
 
-  public async deleteProduct(id: number): Promise<boolean> {
-    const response = await api.delete(`/${id}`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    });
-    return response.data;
+  const response = await api.get(`/${id}`, {
+    headers: {
+      Authorization: `Bearer ${cookie}` || undefined,
+    },
+  });
+  if (response.status === 401) {
+    return redirect('/auth/signin');
   }
+  return response.data;
+}
 
-  public async createProduct(
-    product: CreateProduct
-  ): Promise<IProduct | IProduct[]> {
-    const response = await api.post('/new', product, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    });
-    return response.data;
-  }
+export async function deleteProduct(id: number): Promise<boolean> {
+  const cookie = cookies().get('token')?.value;
+  const response = await api.delete(`/${id}`, {
+    headers: {
+      Authorization: `Bearer ${cookie}`,
+    },
+  });
+  return response.data;
+}
 
-  public async createProductDetails(
-    product: ProductDetails
-  ): Promise<IProduct> {
-    const response = await api.post('/new', product, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    });
-    return response.data;
-  }
+export async function createProduct(
+  product: CreateProduct
+): Promise<IProduct | IProduct[]> {
+  const cookie = cookies().get('token')?.value;
+  const response = await api.post('/new', product, {
+    headers: {
+      Authorization: `Bearer ${cookie}`,
+    },
+  });
+  return response.data;
+}
 
-  public async createManyProduct(product: MultProducts[]): Promise<IProduct[]> {
-    const response = await api.post('/new', product, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    });
-    return response.data;
-  }
+export async function createProductDetails(
+  product: ProductDetails
+): Promise<IProduct> {
+  const cookie = cookies().get('token')?.value;
+  const response = await api.post('/new', product, {
+    headers: {
+      Authorization: `Bearer ${cookie}`,
+    },
+  });
+  return response.data;
+}
 
-  public async updateProduct(product: IProduct): Promise<IProduct> {
-    const response = await api.put(`/${product.id}`, product, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    });
-    return response.data;
-  }
+export async function createManyProduct(
+  product: MultProducts[]
+): Promise<IProduct[]> {
+  const cookie = cookies().get('token')?.value;
+  const response = await api.post('/new', product, {
+    headers: {
+      Authorization: `Bearer ${cookie}`,
+    },
+  });
+  return response.data;
+}
+
+export async function updateProduct(product: IProduct): Promise<IProduct> {
+  const cookie = cookies().get('token')?.value;
+  const response = await api.put(`/${product.id}`, product, {
+    headers: {
+      Authorization: `Bearer ${cookie}`,
+    },
+  });
+  return response.data;
 }

@@ -1,5 +1,5 @@
 'use client';
-import { CreateProduct, ProductService } from '@/Services/Product';
+import { CreateProduct, createManyProduct } from '@/Services/Product';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 
@@ -96,8 +96,7 @@ const ProductForm = () => {
 
   const { mutate: createProduct } = useMutation({
     mutationFn: async () => {
-      const service = new ProductService();
-      await service.createManyProduct(products);
+      await createManyProduct(products);
       sendProducts();
     },
     onSuccess: () => {

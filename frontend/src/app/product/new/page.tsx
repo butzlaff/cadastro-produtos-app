@@ -1,11 +1,11 @@
 'use client';
 
-import { CreateProduct, ProductService } from '@/Services/Product';
+import { CreateProduct, createProduct } from '@/Services/Product';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 
-export default function CreateProduct() {
+export default function CreateNewProduct() {
   const {
     register,
     handleSubmit,
@@ -16,8 +16,7 @@ export default function CreateProduct() {
 
   const onSubmit: SubmitHandler<CreateProduct> = async (data) => {
     try {
-      const service = new ProductService();
-      await service.createProduct(data);
+      await createProduct(data);
       await Swal.fire('Cadastrado com sucesso');
     } catch (e) {
       return Swal.fire({

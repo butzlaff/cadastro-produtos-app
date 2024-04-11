@@ -1,6 +1,6 @@
 'use client';
 
-import { ProductDetails, ProductService } from '@/Services/Product';
+import { ProductDetails, createProductDetails, getProduct } from '@/Services/Product';
 import { IProduct } from '@/components/ProductList';
 import { useParams, useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -11,8 +11,7 @@ export default function CloneProduct() {
   const { id } = useParams<{ id: string }>();
 
   const { data: product } = useQuery(['get_product'], async () => {
-    const service = new ProductService();
-    const products = await service.getProduct(Number(id));
+    const products = await getProduct(Number(id));
     const { name, price } = products;
     return { name, price };
   });
@@ -34,14 +33,13 @@ export default function CloneProduct() {
 
   const onSubmit: SubmitHandler<Partial<IProduct>> = async (data) => {
     try {
-      const service = new ProductService();
       const { name = '', price = 0, model = '', color = '', brand = '' } = data;
       const newProduct: ProductDetails = {
         name,
         price,
         details: { model, color, brand },
       };
-      await service.createProductDetails(newProduct);
+      await createProductDetails(newProduct);
       await Swal.fire('Adicionado com sucesso');
     } catch (e) {
       return Swal.fire({

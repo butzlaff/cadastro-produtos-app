@@ -18,7 +18,9 @@ const LoginForm = () => {
   
   const handleLogin: SubmitHandler<TUser> = async (data) => {
     const user = await Login(data);
+    console.log(data)
     if ('username' in user) {
+      sessionStorage.setItem('user', user.username);
       setUser(user.username)
       router.push('/');
       Swal.fire({

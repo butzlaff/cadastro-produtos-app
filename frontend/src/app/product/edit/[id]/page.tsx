@@ -1,6 +1,6 @@
 'use client';
 
-import { ProductService } from '@/Services/Product';
+import { getProduct, updateProduct } from '@/Services/Product';
 import { IProduct } from '@/components/ProductList';
 import { useParams, useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -13,8 +13,7 @@ export default function EditProduct() {
   const { data: product } = useQuery(
     ['get_product'],
     async () => {
-      const service = new ProductService();
-      const product = await service.getProduct(Number(id));
+      const product = await getProduct(Number(id));
       return product;
     },
     {
@@ -39,8 +38,7 @@ export default function EditProduct() {
 
   const onSubmit: SubmitHandler<IProduct> = async (data) => {
     try {
-      const service = new ProductService();
-      await service.updateProduct(data);
+      await updateProduct(data);
       await Swal.fire('Editado com sucesso');
     } catch (e) {
       return Swal.fire({

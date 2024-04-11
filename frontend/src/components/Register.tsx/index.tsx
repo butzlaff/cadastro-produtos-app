@@ -33,7 +33,8 @@ export default function RegisterForm() {
     }
 
     try {
-      await Register(data);
+      const user = await Register(data);
+      console.log(user)
       await Swal.fire('Cadastrado com sucesso');
     } catch (e) {
       return Swal.fire({

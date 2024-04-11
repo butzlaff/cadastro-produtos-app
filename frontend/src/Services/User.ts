@@ -1,8 +1,11 @@
+'use server';
+
 import axios, { AxiosError } from 'axios';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
+import { cookies } from 'next/headers';
 
 const api = axios.create({
-  baseURL: process.env.ENDPOINT_USER || "https://lexart-desafio-api.vercel.app/user",
+  baseURL: process.env.ENDPOINT_USER || 'http://localhost:3001/user',
 });
 
 export type TUser = {
@@ -24,8 +27,9 @@ export async function Login(
 ): Promise<LoginResponse | ErrorResponse> {
   try {
     const response = await api.post<LoginResponse, any>('/login', user);
+    console.log(response.data);
     const { token } = response.data;
-    Cookies.set('token', token, { expires: 7 });
+    cookies().set('token', token);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -42,12 +46,18 @@ export async function Register(user: TUser) {
 }
 
 export async function getSession() {
-  const cookie = Cookies.get('token');
+  const cookie = cookies().get('token');
+  if (!cookie) return { username: null };
   const response = await api.get<{ username: string; email: string }>('/', {
     headers: {
-      Authorization: `Bearer ${cookie}` || undefined,
+      Authorization: `Bearer ${cookie?.value}` || undefined,
     },
   });
   const data = response.data;
   return data;
+}
+
+export async function Logout() {
+  const cookie = cookies();
+  cookie.delete('token');
 }
